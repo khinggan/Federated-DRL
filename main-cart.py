@@ -1,4 +1,4 @@
-import gym
+import gymnasium as gym
 import torch
 import numpy as np
 import matplotlib.pyplot as plt
@@ -31,7 +31,7 @@ if __name__ == "__main__":
         "min_buffer": 64
     }
 
-    n_runs = 2000
+    n_runs = 200
     n_agents = 3
     n_iterations = 10
     update_rate = 30
@@ -46,18 +46,18 @@ if __name__ == "__main__":
         np.save(f, fed_rewards)
 
     
-    single_rewards = np.zeros(n_runs)
-    for i in range(n_iterations):
-        ag = Agent(**args)
-        for r in tqdm(range(n_runs)):
-            ag.step(update_rate)
-            single_rewards[r] += ag.evaluate()
-    single_rewards /= n_iterations
-    with open('single_rewards.npy', 'wb') as f:
-        np.save(f, single_rewards)
+    # single_rewards = np.zeros(n_runs)
+    # for i in range(n_iterations):
+    #     ag = Agent(**args)
+    #     for r in tqdm(range(n_runs)):
+    #         ag.step(update_rate)
+    #         single_rewards[r] += ag.evaluate()
+    # single_rewards /= n_iterations
+    # with open('single_rewards.npy', 'wb') as f:
+    #     np.save(f, single_rewards)
 
     plt.plot(fed_rewards, color="b", label="federated")
-    plt.plot(single_rewards, color="r", label="single")
+    # plt.plot(single_rewards, color="r", label="single")
     plt.legend()
     plt.show()
     

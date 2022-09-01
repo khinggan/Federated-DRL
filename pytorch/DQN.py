@@ -36,13 +36,15 @@ class Agent():
     def step(self, steps):
         for _ in range(steps):
             self.step_count += 1
-
             action = self.epsilonGreedyPolicy(self.state)
-            state_p, reward, done, info = self.env.step(action)
+            state_p, reward, terminated, truncated, info = self.env.step(action) # observation, reward, terminated, truncated, info
             self.episode_reward += reward
 
-            is_truncated = 'TimeLimit.truncated' in info and info['TimeLimit.truncated']
-            is_failure = done and not is_truncated
+            # is_truncated = 'TimeLimit.truncated' in info and info['TimeLimit.truncated']
+            # is_failure = done and not is_truncated
+
+            done = terminated or truncated
+            is_failure = done and not truncated
             self.buffer.store(self.state, action, reward, state_p, float(is_failure))
 
             if len(self.buffer) >= self.min_buffer:
@@ -94,8 +96,12 @@ class Agent():
         rewards = 0
         state = self.env_test.reset()
         while True:
+            if type(state) == tuple:
+                state = state[0]
             action = self.greedyPolicy(state)
-            state_p, reward, done, _ = self.env_test.step(action)
+            state_p, reward, terminated, truncated, info = self.env_test.step(action)    # observation, reward, terminated, truncated, info
+
+            done = terminated or truncated
             rewards += reward
             if done:
                 break

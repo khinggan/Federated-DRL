@@ -12,12 +12,12 @@ class ReplayBuffer:
         self.actions = np.empty(shape=(max_size, 1), dtype=np.int64)
         self.rewards = np.empty(shape=(max_size))
         self.states_p = np.empty(shape=(max_size, *state_shape))
-        self.is_terminals = np.empty(shape=(max_size), dtype=np.float)
+        self.is_terminals = np.empty(shape=(max_size), dtype=np.float32)
 
     def __len__(self): return self.size
     
     def store(self, state, action, reward, state_p, is_terminal):
-        self.states[self.next] = state
+        self.states[self.next] = state[0]
         self.actions[self.next] = action
         self.rewards[self.next] = reward
         self.states_p[self.next] = state_p

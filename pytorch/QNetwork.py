@@ -21,6 +21,8 @@ class FCQ(torch.nn.Module):
 
     def format_(self, states):
         if not isinstance(states, torch.Tensor):
+            if type(states) == tuple:
+                states = states[0]
             states = torch.tensor(states, dtype=torch.float32)
         return states
 
